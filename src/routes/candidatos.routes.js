@@ -126,24 +126,38 @@ candidatosRoutes.get("/:id", (req, res) => {
   return res.status(200).json(candidato);
 });
 
+// Rota para atualizar um candidato pelo id
 candidatosRoutes.put("/:id", (req, res) => {
   const { id } = req.params;
-  const { name, email } = req.body;
+  const { nome, partido, idade, segundo, propostas } = req.body;
 
-  const candidato = candidatos.find((candidato) => candidato.id === Number(id));
+  // Busca um candidato pelo id no array de candidatos
+  const candidato = candidatos.find((politico) => politico.id == id);
 
+  // Verifica se o candidato foi encontrado
   if (!candidato) {
-    return res.status(404).json({ message: "candidato not found!" });
+    return res
+      .status(404)
+      .json({ message: `Candidato com id ${id} não encontrado!` });
   }
 
-  if (!name || !email) {
-    return res.status(400).json({ message: "Name and email are required!" });
+  // Validação dos campos nome e partido
+  if (!nome || !partido) {
+    return res.status(400).send({
+      message: "O nome ou o partido não foi preenchido, criança aleatória!",
+    });
   }
 
-  candidato.name = name;
-  candidato.email = email;
+  candidato.nome = nome;
+  candidato.partido = partido;
+  candidato.idade = idade;
+  candidato.segundo = segundo;
+  candidato.propostas = propostas;
 
-  return res.status(200).json(candidato);
+  return res.status(200).json({
+    message: "Candidato atualizado com sucesso!",
+    candidato,
+  });
 });
 
 candidatosRoutes.delete("/:id", (req, res) => {
