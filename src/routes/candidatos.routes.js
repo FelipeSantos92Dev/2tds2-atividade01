@@ -163,15 +163,23 @@ candidatosRoutes.put("/:id", (req, res) => {
 candidatosRoutes.delete("/:id", (req, res) => {
   const { id } = req.params;
 
-  const candidato = candidatos.find((candidato) => candidato.id === Number(id));
+  // Busca um candidato pelo id no array de candidatos
+  const candidato = candidatos.find((politico) => politico.id == id);
 
+  // Verifica se o candidato foi encontrado
   if (!candidato) {
-    return res.status(404).json({ message: "candidato not found!" });
+    return res
+      .status(404)
+      .json({ message: `Candidato com id ${id} não encontrado!` });
   }
 
-  candidatos = candidatos.filter((candidato) => candidato.id !== Number(id));
+  // Remove o candidato do array de candidatos
+  candidatos = candidatos.filter((candidato) => candidato.id != id);
 
-  return res.status(200).json({ message: "candidato deleted successfully!" });
+  return res.status(200).json({
+    message: "Candidato removido com sucesso!",
+    candidato,
+  });
 });
 
 export default candidatosRoutes;
