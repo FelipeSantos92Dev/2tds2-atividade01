@@ -2,6 +2,7 @@ import { Router } from "express";
 
 const candidatosRoutes = Router();
 
+// Array com candidatos pré-cadastrados
 let candidatos = [
   {
     id: Math.floor(Math.random() * 1000000),
@@ -15,12 +16,62 @@ let candidatos = [
       "Mais investimentos em educação",
     ],
   },
+  {
+    id: Math.floor(Math.random() * 1000000),
+    nome: "Doutor Zé da Silva",
+    partido: "PT",
+    idade: 55,
+    segundo: false,
+    propostas: [
+      "Mais investimentos em saúde",
+      "Redução da jornada de trabalho",
+      "Reforma agrária",
+    ],
+  },
+  {
+    id: Math.floor(Math.random() * 1000000),
+    nome: "Maria das Dores",
+    partido: "PSDB",
+    idade: 38,
+    segundo: true,
+    propostas: [
+      "Mais investimentos em segurança",
+      "Redução da maioridade penal",
+      "Reforma tributária",
+    ],
+  },
+  {
+    id: Math.floor(Math.random() * 1000000),
+    nome: "João do Povo",
+    partido: "MDB",
+    idade: 47,
+    segundo: false,
+    propostas: [
+      "Mais investimentos em infraestrutura",
+      "Redução da desigualdade social",
+      "Reforma política",
+    ],
+  },
+  {
+    id: Math.floor(Math.random() * 1000000),
+    nome: "Dona Maria",
+    partido: "PSOL",
+    idade: 63,
+    segundo: true,
+    propostas: [
+      "Mais investimentos em cultura",
+      "Redução do desmatamento",
+      "Reforma urbana",
+    ],
+  },
 ];
 
+// Rota para listar todos os candidatos
 candidatosRoutes.get("/", (req, res) => {
   return res.status(200).json(candidatos);
 });
 
+// Rota para cadastrar um novo candidato
 candidatosRoutes.post("/", (req, res) => {
   const { nome, partido, idade, segundo, propostas } = req.body;
 
@@ -39,6 +90,7 @@ candidatosRoutes.post("/", (req, res) => {
     });
   }
 
+  // Criação de um novo candidato
   const novoCandidato = {
     id: Math.floor(Math.random() * 1000000),
     nome,
@@ -48,6 +100,7 @@ candidatosRoutes.post("/", (req, res) => {
     propostas,
   };
 
+  // Adiciona o novo candidato ao array de candidatos
   candidatos.push(novoCandidato);
 
   return res.status(201).json({
@@ -56,13 +109,18 @@ candidatosRoutes.post("/", (req, res) => {
   });
 });
 
+// Rota para buscar um candidato pelo id
 candidatosRoutes.get("/:id", (req, res) => {
   const { id } = req.params;
 
+  // Busca um candidato pelo id no array de candidatos
   const candidato = candidatos.find((politico) => politico.id == id);
 
+  // Verifica se o candidato foi encontrado
   if (!candidato) {
-    return res.status(404).json({ message: "Candidato não encontrado!" });
+    return res
+      .status(404)
+      .json({ message: `Candidato com id ${id} não encontrado!` });
   }
 
   return res.status(200).json(candidato);
